@@ -8,7 +8,6 @@
 import json
 from typing import Iterable
 
-from torch.utils.data import Dataset, ConcatDataset
 from torch.utils.data.dataloader import default_collate
 
 
@@ -39,10 +38,8 @@ class BaseDataset(Dataset):
 
     def set_processors(self, vis_processor, text_processor):
         self.vis_processor = vis_processor
-        self.text_processor = text_processor
 
     def _add_instance_ids(self, key="instance_id"):
-        for idx, ann in enumerate(self.annotation):
             ann[key] = str(idx)
 
 
@@ -60,8 +57,6 @@ class ConcatDataset(ConcatDataset):
         shared_keys = all_keys
         for s in samples:
             shared_keys = shared_keys & set(s.keys())
-
-        samples_shared_keys = []
         for s in samples:
             samples_shared_keys.append({k: s[k] for k in s.keys() if k in shared_keys})
 
